@@ -2,6 +2,7 @@ package com.changxindata.partnersmanagement.controller;
 
 import com.changxindata.partnersmanagement.common.ApplicationBean;
 import com.changxindata.partnersmanagement.common.PermissionRoleBean;
+import com.changxindata.partnersmanagement.common.Response;
 import com.changxindata.partnersmanagement.domain.system.Permission;
 import com.changxindata.partnersmanagement.domain.system.PermissionRole;
 import com.changxindata.partnersmanagement.domain.system.Role;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/sys")
 public class SystemControllerAPI {
@@ -45,26 +47,36 @@ public class SystemControllerAPI {
     //=====User====
     @PostMapping("/addUser")
     @ResponseBody
-    public ResponseEntity<Boolean> addUser(@RequestBody ApplicationBean application) {
+    public Response addUser(@RequestBody ApplicationBean application) {
+        Response response = new Response();
+
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             User user = new User();
             BeanUtils.copyProperties(application, user);
             userRepo.save(user);
-            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+            response.setResultCode(HttpStatus.OK.value());
+            response.setResultMsg(HttpStatus.OK.getReasonPhrase());
         } else {
-            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.METHOD_NOT_ALLOWED);
+            response.setResultCode(HttpStatus.METHOD_NOT_ALLOWED.value());
+            response.setResultMsg(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
         }
+        return response;
     }
 
     @PostMapping("/updateUserRole")
     @ResponseBody
-    public ResponseEntity<Boolean> updateUserRole(@RequestBody ApplicationBean application) {
+    public Response updateUserRole(@RequestBody ApplicationBean application) {
+        Response response = new Response();
+
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             userRepo.updateRole(application.getRoleId(), application.getUserId());
-            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+            response.setResultCode(HttpStatus.OK.value());
+            response.setResultMsg(HttpStatus.OK.getReasonPhrase());
         } else {
-            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.METHOD_NOT_ALLOWED);
+            response.setResultCode(HttpStatus.METHOD_NOT_ALLOWED.value());
+            response.setResultMsg(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
         }
+        return response;
     }
 
     @GetMapping(value = "/list")
@@ -84,31 +96,43 @@ public class SystemControllerAPI {
     //=====Role====
     @PostMapping("/addRole")
     @ResponseBody
-    public ResponseEntity<Boolean> addRole(@RequestBody ApplicationBean application) {
+    public Response addRole(@RequestBody ApplicationBean application) {
+        Response response = new Response();
+
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             Role role = new Role();
             BeanUtils.copyProperties(application, role);
             roleRepo.save(role);
-            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+            response.setResultCode(HttpStatus.OK.value());
+            response.setResultMsg(HttpStatus.OK.getReasonPhrase());
         } else {
-            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.METHOD_NOT_ALLOWED);
+            response.setResultCode(HttpStatus.METHOD_NOT_ALLOWED.value());
+            response.setResultMsg(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
         }
+        return response;
     }
 
     @PostMapping("/removeRole")
     @ResponseBody
-    public ResponseEntity<Boolean> removeRole(@RequestBody ApplicationBean application) {
+    public Response removeRole(@RequestBody ApplicationBean application) {
+        Response response = new Response();
+
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             roleRepo.deleteById(application.getRoleId());
-            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+            response.setResultCode(HttpStatus.OK.value());
+            response.setResultMsg(HttpStatus.OK.getReasonPhrase());
         } else {
-            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.METHOD_NOT_ALLOWED);
+            response.setResultCode(HttpStatus.METHOD_NOT_ALLOWED.value());
+            response.setResultMsg(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
         }
+        return response;
     }
 
     @PostMapping("/updatePermissionRole")
     @ResponseBody
-    public ResponseEntity<Boolean> updatePermissionRole(@RequestBody PermissionRoleBean application) {
+    public Response updatePermissionRole(@RequestBody PermissionRoleBean application) {
+        Response response = new Response();
+
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             String roleId = application.getRoleId();
             permissionRoleRepo.deleteAllByRoleId(roleId);
@@ -122,37 +146,49 @@ public class SystemControllerAPI {
             if(!list.isEmpty()) {
                 permissionRoleRepo.saveAll(list);
             }
-
-            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+            response.setResultCode(HttpStatus.OK.value());
+            response.setResultMsg(HttpStatus.OK.getReasonPhrase());
         } else {
-            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.METHOD_NOT_ALLOWED);
+            response.setResultCode(HttpStatus.METHOD_NOT_ALLOWED.value());
+            response.setResultMsg(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
         }
+        return response;
     }
 
 
     //=====Permission====
     @PostMapping("/addPermission")
     @ResponseBody
-    public ResponseEntity<Boolean> addPermission(@RequestBody ApplicationBean application) {
+    public Response addPermission(@RequestBody ApplicationBean application) {
+        Response response = new Response();
+
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             Permission permission = new Permission();
             BeanUtils.copyProperties(application, permission);
             permissionRepo.save(permission);
-            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+            response.setResultCode(HttpStatus.OK.value());
+            response.setResultMsg(HttpStatus.OK.getReasonPhrase());
         } else {
-            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.METHOD_NOT_ALLOWED);
+            response.setResultCode(HttpStatus.METHOD_NOT_ALLOWED.value());
+            response.setResultMsg(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
         }
+        return response;
     }
 
     @PostMapping("/removePermission")
     @ResponseBody
-    public ResponseEntity<Boolean> removePermission(@RequestBody ApplicationBean application) {
+    public Response removePermission(@RequestBody ApplicationBean application) {
+        Response response = new Response();
+
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             permissionRepo.deleteById(application.getPermissionId());
-            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+            response.setResultCode(HttpStatus.OK.value());
+            response.setResultMsg(HttpStatus.OK.getReasonPhrase());
         } else {
-            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.METHOD_NOT_ALLOWED);
+            response.setResultCode(HttpStatus.METHOD_NOT_ALLOWED.value());
+            response.setResultMsg(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
         }
+        return response;
     }
 
 

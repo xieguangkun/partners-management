@@ -1,14 +1,15 @@
 package com.changxindata.partnersmanagement.controller;
 
 import com.changxindata.partnersmanagement.common.ApplicationBean;
+import com.changxindata.partnersmanagement.common.Response;
 import com.changxindata.partnersmanagement.domain.system.User;
 import com.changxindata.partnersmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserControllerAPI {
@@ -18,26 +19,33 @@ public class UserControllerAPI {
 
     @PostMapping(value ="/loginApply")
     @ResponseBody
-    public ResponseEntity<Boolean> login(@RequestBody User user) {
+    public Response login(@RequestBody User user) {
+        Response response = new Response();
         Boolean result = userService.checkUser(user.getUsername(), user.getPassword());
-        return new ResponseEntity<>(result, HttpStatus.OK);
+
+        response.setResultCode(HttpStatus.OK.value());
+        if(result) {
+            response.setResultMsg("登陆成功");
+        } else {
+            response.setResultMsg("账号或密码错误");
+        }
+        return response;
     }
 
     @PostMapping(value = "/updateInfo")
     @ResponseBody
-    public ResponseEntity<Boolean> updateUserInfo(@RequestBody ApplicationBean application) {
+    public Response updateUserInfo(@RequestBody ApplicationBean application) {
+        Response response = new Response();
         Boolean result = userService.updateUserProperty(application);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
 
-//    @GetMapping(value = "/list")
-//    public ResponseEntity<Page<User>> getAllUsers(@RequestParam("start") Integer start,
-//                                  @RequestParam("size") Integer size) {
-//        int pageStart = (start == null) ? 0 : start.intValue();
-//        int pageSize = (size == null) ? 50 : size.intValue();
-//
-//        return new ResponseEntity<>(userService.getAllUsers(pageStart, pageSize), HttpStatus.OK);
-//    }
+        response.setResultCode(HttpStatus.OK.value());
+        if(result) {
+            response.setResultMsg("更新成功");
+        } else {
+            response.setResultMsg("更新失败");
+        }
+        return response;
+    }
 
     @GetMapping(value = "/get")
     public ResponseEntity<User> getUserById(@RequestParam("id") String id) {
