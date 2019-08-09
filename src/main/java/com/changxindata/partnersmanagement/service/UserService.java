@@ -20,13 +20,13 @@ public class UserService {
     @Autowired
     private UserRepository userRepo;
 
-    public boolean checkUser(String username, String password) {
+    public User checkUser(String username, String password) {
+        User user = new User();
         Optional opt = userRepo.findUserByUsernameAndPassword(username, password);
         if(opt.isPresent()) {
-            return true;
-        } else {
-            return false;
+            user = (User)opt.get();
         }
+        return user;
     }
 
     /**

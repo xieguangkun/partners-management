@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -48,11 +49,19 @@ public class SystemControllerAPI {
     @PostMapping("/addUser")
     @ResponseBody
     public Response addUser(@RequestBody ApplicationBean application) {
-        Response response = new Response();
+        Response response = Response.EMPTY;
 
-        if(application.getOperator().equals(DEFAULT_OPERATOR)) {
+        if(DEFAULT_OPERATOR.equals(application.getOperator()) || !DEFAULT_OPERATOR.equals(application.getName())) {
+            Optional findUser = userRepo.findUserByUsername(application.getUsername());
+            if(findUser.isPresent()) {
+                response.setResultCode(HttpStatus.OK.value());
+                response.setResultMsg("用户已存在");
+                return response;
+            }
+
             User user = new User();
             BeanUtils.copyProperties(application, user);
+
             userRepo.save(user);
             response.setResultCode(HttpStatus.OK.value());
             response.setResultMsg(HttpStatus.OK.getReasonPhrase());
@@ -66,7 +75,7 @@ public class SystemControllerAPI {
     @PostMapping("/updateUserRole")
     @ResponseBody
     public Response updateUserRole(@RequestBody ApplicationBean application) {
-        Response response = new Response();
+        Response response = Response.EMPTY;
 
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             userRepo.updateRole(application.getRoleId(), application.getUserId());
@@ -97,7 +106,7 @@ public class SystemControllerAPI {
     @PostMapping("/addRole")
     @ResponseBody
     public Response addRole(@RequestBody ApplicationBean application) {
-        Response response = new Response();
+        Response response = Response.EMPTY;
 
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             Role role = new Role();
@@ -115,7 +124,7 @@ public class SystemControllerAPI {
     @PostMapping("/removeRole")
     @ResponseBody
     public Response removeRole(@RequestBody ApplicationBean application) {
-        Response response = new Response();
+        Response response = Response.EMPTY;
 
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             roleRepo.deleteById(application.getRoleId());
@@ -131,7 +140,7 @@ public class SystemControllerAPI {
     @PostMapping("/updatePermissionRole")
     @ResponseBody
     public Response updatePermissionRole(@RequestBody PermissionRoleBean application) {
-        Response response = new Response();
+        Response response = Response.EMPTY;
 
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             String roleId = application.getRoleId();
@@ -160,7 +169,7 @@ public class SystemControllerAPI {
     @PostMapping("/addPermission")
     @ResponseBody
     public Response addPermission(@RequestBody ApplicationBean application) {
-        Response response = new Response();
+        Response response = Response.EMPTY;
 
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             Permission permission = new Permission();
@@ -178,7 +187,7 @@ public class SystemControllerAPI {
     @PostMapping("/removePermission")
     @ResponseBody
     public Response removePermission(@RequestBody ApplicationBean application) {
-        Response response = new Response();
+        Response response = Response.EMPTY;
 
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
             permissionRepo.deleteById(application.getPermissionId());

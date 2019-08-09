@@ -20,22 +20,25 @@ public class UserControllerAPI {
     @PostMapping(value ="/loginApply")
     @ResponseBody
     public Response login(@RequestBody User user) {
-        Response response = new Response();
-        Boolean result = userService.checkUser(user.getUsername(), user.getPassword());
+        User registeredUser = userService.checkUser(user.getUsername(), user.getPassword());
 
-        response.setResultCode(HttpStatus.OK.value());
-        if(result) {
+        if(registeredUser.getEnable()) {
+            Response response = new Response(registeredUser);
+            response.setResultCode(HttpStatus.OK.value());
             response.setResultMsg("登陆成功");
+            return response;
         } else {
+            Response response = Response.EMPTY;
+            response.setResultCode(HttpStatus.OK.value());
             response.setResultMsg("账号或密码错误");
+            return response;
         }
-        return response;
     }
 
     @PostMapping(value = "/updateInfo")
     @ResponseBody
     public Response updateUserInfo(@RequestBody ApplicationBean application) {
-        Response response = new Response();
+        Response response = Response.EMPTY;
         Boolean result = userService.updateUserProperty(application);
 
         response.setResultCode(HttpStatus.OK.value());
