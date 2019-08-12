@@ -19,6 +19,8 @@ import java.util.Date;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
 public class BaseDomain implements Serializable {
 
     private static final long serialVersionUID = -5670381959764596931L;
@@ -48,4 +50,5 @@ public class BaseDomain implements Serializable {
 
     @Version
     private Long version;
+
 }
