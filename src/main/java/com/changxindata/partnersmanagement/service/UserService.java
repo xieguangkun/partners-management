@@ -1,7 +1,11 @@
 package com.changxindata.partnersmanagement.service;
 
 import com.changxindata.partnersmanagement.common.ApplicationBean;
+import com.changxindata.partnersmanagement.domain.system.Permission;
+import com.changxindata.partnersmanagement.domain.system.PermissionRole;
 import com.changxindata.partnersmanagement.domain.system.User;
+import com.changxindata.partnersmanagement.repository.PermissionRepository;
+import com.changxindata.partnersmanagement.repository.PermissionRoleRepository;
 import com.changxindata.partnersmanagement.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,6 +26,12 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private PermissionRoleRepository prRepo;
+
+    @Autowired
+    private PermissionRepository permissionRepo;
 
     public User checkUser(String username, String password) {
         User user = new User();
@@ -75,6 +88,19 @@ public class UserService {
         } else {
             return false;
         }
+    }
+
+    public List<String> getAllPermission(String roleId) {
+        List<PermissionRole> prList =  prRepo.findAllByRoleId(roleId);
+        List<String> permissionList = new ArrayList<>();
+        for(PermissionRole pr : prList) {
+            Optional optional = permissionRepo.findById(pr.getPermissionId());
+            if(optional.isPresent()) {
+                Permission permission = (Permission)optional.get();
+                permissionList.add(permission.getMask());
+            }
+        }
+        return permissionList;
     }
 
 

@@ -2,12 +2,15 @@ package com.changxindata.partnersmanagement.controller;
 
 import com.changxindata.partnersmanagement.common.ApplicationBean;
 import com.changxindata.partnersmanagement.common.Response;
+import com.changxindata.partnersmanagement.domain.system.Permission;
 import com.changxindata.partnersmanagement.domain.system.User;
 import com.changxindata.partnersmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -53,5 +56,10 @@ public class UserControllerAPI {
     @GetMapping(value = "/get")
     public ResponseEntity<User> getUserById(@RequestParam("id") String id) {
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/permissions")
+    public ResponseEntity<List<String>> getPermissionsByRoleId(@RequestParam("id") String id) {
+        return new ResponseEntity<>(userService.getAllPermission(id), HttpStatus.OK);
     }
 }
