@@ -88,7 +88,7 @@ public class SystemControllerAPI {
         return response;
     }
 
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/userList")
     public ResponseEntity<Page<User>> getAllUsers(@RequestParam("start") Integer start,
                                                   @RequestParam("size") Integer size) {
         int pageStart = (start == null) ? 0 : start.intValue();
@@ -135,6 +135,11 @@ public class SystemControllerAPI {
             response.setResultMsg(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
         }
         return response;
+    }
+
+    @GetMapping(value = "/roleList")
+    public ResponseEntity<List<Role>> getAllRoles() {
+        return new ResponseEntity<>(roleRepo.findAll(), HttpStatus.OK);
     }
 
     @PostMapping("/updatePermissionRole")
@@ -198,6 +203,11 @@ public class SystemControllerAPI {
             response.setResultMsg(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
         }
         return response;
+    }
+
+    @GetMapping(value = "/permissionList")
+    public ResponseEntity<List<Permission>> getAllPermissions() {
+        return new ResponseEntity<>(permissionRepo.findAll(), HttpStatus.OK);
     }
 
 
