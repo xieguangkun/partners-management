@@ -127,7 +127,10 @@ public class SystemControllerAPI {
         Response response = Response.EMPTY;
 
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
-            roleRepo.deleteById(application.getRoleId());
+            String[] ids = application.getRoleId().split(",");
+            for(String id : ids) {
+                roleRepo.deleteById(id);
+            }
             response.setResultCode(HttpStatus.OK.value());
             response.setResultMsg(HttpStatus.OK.getReasonPhrase());
         } else {
@@ -195,7 +198,10 @@ public class SystemControllerAPI {
         Response response = Response.EMPTY;
 
         if(application.getOperator().equals(DEFAULT_OPERATOR)) {
-            permissionRepo.deleteById(application.getPermissionId());
+            String[] ids = application.getPermissionId().split(",");
+            for(String id : ids) {
+                permissionRepo.deleteById(id);
+            }
             response.setResultCode(HttpStatus.OK.value());
             response.setResultMsg(HttpStatus.OK.getReasonPhrase());
         } else {

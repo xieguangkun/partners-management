@@ -15,8 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,15 +33,6 @@ public class UserService {
 
     @Autowired
     private PermissionRepository permissionRepo;
-
-    public User checkUser(String username, String password) {
-        User user = new User();
-        Optional opt = userRepo.findUserByUsernameAndPassword(username, password);
-        if(opt.isPresent()) {
-            user = (User)opt.get();
-        }
-        return user;
-    }
 
     /**
      *  获取单个用户
@@ -76,14 +68,11 @@ public class UserService {
      * @param application
      * @return
      */
-    public boolean updateUserProperty(ApplicationBean application) {
-        String userId = application.getUserId();
+    public boolean updateUserProperty(User application) {
+        String userId = application.getId();
         Optional opt = userRepo.findById(userId);
         if(opt.isPresent()) {
-            User user = new User();
-            BeanUtils.copyProperties(application, user);
-            userRepo.deleteById(userId);
-            userRepo.save(user);
+            userRepo.updateUserInfo(application);
             return true;
         } else {
             return false;
