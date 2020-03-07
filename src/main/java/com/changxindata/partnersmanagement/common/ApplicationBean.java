@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+//POST请求的三种请求方式都包含在内
 public class ApplicationBean {
     private String operator;
 
