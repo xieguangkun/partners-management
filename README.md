@@ -1,0 +1,2 @@
+# partners-management
+authorization project
